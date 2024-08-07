@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nutrition_tracker_application/AddFoodPage.dart';
 
 class HomePage extends StatelessWidget {
   final int totalCalories = 2200; // Example total calories goal
@@ -450,6 +451,7 @@ class HomePage extends StatelessWidget {
                 );
               }).toList(),
             ),
+            SizedBox(height: 16),
           ],
         ),
       ),
@@ -479,7 +481,10 @@ class HomePage extends StatelessWidget {
         backgroundColor: Color(0xff6750a4),
         child: Icon(Icons.add, color: Color(0xfffafafa)),
         onPressed: () {
-          // Navigate to add food page
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddFoodPage()),
+          );
         },
       ),
     );
