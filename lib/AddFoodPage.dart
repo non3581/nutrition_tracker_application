@@ -28,12 +28,13 @@ class _AddFoodPageState extends State<AddFoodPage> {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        return {
-          'calories': data['calories'] ?? 0,
-          'carbs': data['totalNutrients']['CHOCDF']?['quantity'] ?? 0,
-          'protein': data['totalNutrients']['PROCNT']?['quantity'] ?? 0,
-          'fat': data['totalNutrients']['FAT']?['quantity'] ?? 0,
-        };
+return {
+  'calories': (data['calories'] ?? 0).toInt(),
+  'carbs': ((data['totalNutrients']['CHOCDF']?['quantity'] ?? 0) as double).toInt(),
+  'protein': ((data['totalNutrients']['PROCNT']?['quantity'] ?? 0) as double).toInt(),
+  'fat': ((data['totalNutrients']['FAT']?['quantity'] ?? 0) as double).toInt(),
+};
+
       } else {
         throw Exception('Failed to load nutrition data');
       }

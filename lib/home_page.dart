@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   double consumedCarbs = 0;
   double consumedProtein = 0;
   double consumedFat = 0;
-  double consumedWater = 0;
+  // double consumedWater = 0;
 
   double calculateCarbGoal() {
     double tdee = calculateTDEE();
@@ -91,9 +91,9 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  double calculateWaterRequirement() {
-    return weight * 30; // Standard recommendation: 30 ml per kg of body weight
-  }
+  // double calculateWaterRequirement() {
+  //   return weight * 30; // Standard recommendation: 30 ml per kg of body weight
+  // }
 
   void _addFood(Map<String, dynamic> newFood) {
     setState(() {
@@ -103,9 +103,9 @@ class _HomePageState extends State<HomePage> {
       consumedProtein += newFood['protein'];
       consumedFat += newFood['fat'];
 
-      if (newFood['name'].toLowerCase() == 'water') {
-        consumedWater += newFood['weight'];
-      }
+      // if (newFood['name'].toLowerCase() == 'water') {
+      //   consumedWater += newFood['weight'];
+      // }
     });
   }
 
@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double totalCalories = calculateTDEE();
-    double totalWater = calculateWaterRequirement();
+    // double totalWater = calculateWaterRequirement();
 
     int carbGoal = (calculateCarbGoal()).toInt();
     int proteinGoal = (calculateProteinGoal()).toInt();
@@ -151,10 +151,10 @@ class _HomePageState extends State<HomePage> {
     int consumedCarbsInt = consumedCarbs.toInt();
     int consumedProteinInt = consumedProtein.toInt();
     int consumedFatInt = consumedFat.toInt();
-    int consumedWaterInt = consumedWater.toInt();
+    // int consumedWaterInt = consumedWater.toInt();
 
     double remainingCalories = totalCalories - consumedCalories;
-    double remainingWater = totalWater - consumedWater;
+    // double remainingWater = totalWater - consumedWater;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -416,52 +416,52 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SizedBox(height: 24),
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Color(0xff6750a4).withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Water Remaining',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff6750a4),
-                    ),
-                  ),
-                  Text(
-                    '${remainingWater.toStringAsFixed(1)} ml',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: LinearProgressIndicator(
-                      value: consumedWater / totalWater,
-                      color: Color(0xff6750a4),
-                      backgroundColor: Color(0xff6750a4).withOpacity(0.3),
-                      minHeight: 20,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Intake ${consumedWater.toStringAsFixed(1)} ml / ${totalWater.toStringAsFixed(1)} ml',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Container(
+            //   padding: EdgeInsets.all(16),
+            //   decoration: BoxDecoration(
+            //     color: Color(0xff6750a4).withOpacity(0.1),
+            //     borderRadius: BorderRadius.circular(8),
+            //   ),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Text(
+            //         'Water Remaining',
+            //         style: TextStyle(
+            //           fontSize: 18,
+            //           fontWeight: FontWeight.bold,
+            //           color: Color(0xff6750a4),
+            //         ),
+            //       ),
+            //       Text(
+            //         '${remainingWater.toStringAsFixed(1)} ml',
+            //         style: TextStyle(
+            //           fontSize: 24,
+            //           fontWeight: FontWeight.bold,
+            //           color: Colors.black,
+            //         ),
+            //       ),
+            //       SizedBox(height: 8),
+            //       ClipRRect(
+            //         borderRadius: BorderRadius.circular(4),
+            //         child: LinearProgressIndicator(
+            //           value: consumedWater / totalWater,
+            //           color: Color(0xff6750a4),
+            //           backgroundColor: Color(0xff6750a4).withOpacity(0.3),
+            //           minHeight: 20,
+            //         ),
+            //       ),
+            //       SizedBox(height: 8),
+            //       Text(
+            //         'Intake ${consumedWater.toStringAsFixed(1)} ml / ${totalWater.toStringAsFixed(1)} ml',
+            //         style: TextStyle(
+            //           fontSize: 16,
+            //           color: Colors.black,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             SizedBox(height: 24),
             Text(
               'Recent Foods',

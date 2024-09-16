@@ -70,9 +70,15 @@ class _EditPersonalInfoPageState extends State<EditPersonalInfoPage> {
         title: Text('Edit Personal Information'),
         backgroundColor: Color(0xff6750a4),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back,color: Color(0xfffafafa)),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        titleTextStyle: TextStyle(
+          color: Color(0xfffafafa),
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
