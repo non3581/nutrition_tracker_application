@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+<<<<<<< HEAD
 import 'package:nutrition_tracker_application/home_page.dart'; // Import the page
+=======
+import 'package:nutrition_tracker_application/home_page.dart';
+>>>>>>> 1a1e2685ac92b17d21d8a6c09faed1e894d2d227
 
 void main() {
   runApp(MyApp());
@@ -10,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+<<<<<<< HEAD
       title: 'Nutrition',
       home: WelcomePage(),
       debugShowCheckedModeBanner: false,
@@ -45,6 +50,33 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
+=======
+        title: 'Nutriton',
+        home: WelcomePage(),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: true,
+          textTheme: GoogleFonts.interTextTheme(),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xff6750a4),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4)),
+              textStyle: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              minimumSize: Size(double.infinity, 50),
+            ),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+        ));
+>>>>>>> 1a1e2685ac92b17d21d8a6c09faed1e894d2d227
   }
 }
 
@@ -67,9 +99,13 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+<<<<<<< HEAD
         padding: EdgeInsets.all(32),
         child: Form(
           key: _formKey,
+=======
+          padding: EdgeInsets.all(32),
+>>>>>>> 1a1e2685ac92b17d21d8a6c09faed1e894d2d227
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -167,6 +203,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
+<<<<<<< HEAD
                     if (_formKey.currentState!.validate()) {
                       // Parse the text fields to doubles
                       double? weight = double.tryParse(_weightController.text);
@@ -186,6 +223,10 @@ class _WelcomePageState extends State<WelcomePage> {
                         ),
                       );
                     }
+=======
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
+>>>>>>> 1a1e2685ac92b17d21d8a6c09faed1e894d2d227
                   },
                   child: Text('Continue'),
                 ),

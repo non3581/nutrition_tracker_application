@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nutrition_tracker_application/AddFoodPage.dart';
+<<<<<<< HEAD
 import 'package:nutrition_tracker_application/personal.dart';
+=======
+>>>>>>> 1a1e2685ac92b17d21d8a6c09faed1e894d2d227
 
 class HomePage extends StatefulWidget {
   final int age;
@@ -526,6 +529,7 @@ Column(
                 );
               }).toList(),
             ),
+            SizedBox(height: 16),
           ],
         ),
       ),
@@ -565,6 +569,7 @@ Column(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff6750a4),
         child: Icon(Icons.add, color: Color(0xfffafafa)),
+<<<<<<< HEAD
         onPressed: () async {
           final newFood = await Navigator.push(
             context,
@@ -574,6 +579,13 @@ Column(
           if (newFood != null) {
             _addFood(newFood);
           }
+=======
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddFoodPage()),
+          );
+>>>>>>> 1a1e2685ac92b17d21d8a6c09faed1e894d2d227
         },
       ),
     );
