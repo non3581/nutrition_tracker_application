@@ -37,25 +37,6 @@ class _HomePageState extends State<HomePage> {
   double consumedFat = 0;
   double consumedWater = 0;
 
-  double calculateCarbGoal() {
-  double tdee = calculateTDEE();
-    // Example: 50% of total calories from carbs
-    return (tdee * 0.50) / 4; // 4 calories per gram of carbs
-  }
-
-  double calculateProteinGoal() {
-    double tdee = calculateTDEE();
-    // Example: 20% of total calories from protein
-    return (tdee * 0.20) / 4; // 4 calories per gram of protein
-  }
-
-  double calculateFatGoal() {
-    double tdee = calculateTDEE();
-    // Example: 30% of total calories from fat
-    return (tdee * 0.30) / 9; // 9 calories per gram of fat
-  }
-
-
   @override
   void initState() {
     super.initState();
@@ -66,6 +47,7 @@ class _HomePageState extends State<HomePage> {
     activeLevel = widget.activeLevel;
   }
 
+  // Function to calculate BMR
   double calculateBMR() {
     if (gender == 'Male') {
       return 10 * weight + 6.25 * height - 5 * age + 5;
@@ -74,6 +56,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Function to calculate TDEE based on activity level
   double calculateTDEE() {
     double bmr = calculateBMR();
     switch (activeLevel) {
@@ -92,79 +75,93 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Function to calculate daily water intake requirement
   double calculateWaterRequirement() {
     return weight * 30; // Standard recommendation: 30 ml per kg of body weight
   }
 
-void _addFood(Map<String, dynamic> newFood) {
-  setState(() {
-    foodItems.add(newFood);
-    consumedCalories += newFood['calories'];
-    consumedCarbs += newFood['carbs'];
-    consumedProtein += newFood['protein'];
-    consumedFat += newFood['fat'];
+  // Function to handle food addition from AddFoodPage
+  void _addFood(Map<String, dynamic> newFood) {
+    setState(() {
+      foodItems.add(newFood);
+      consumedCalories += newFood['calories'];
+      consumedCarbs += newFood['carbs'];
+      consumedProtein += newFood['protein'];
+      consumedFat += newFood['fat'];
 
-    if (newFood['name'].toLowerCase() == 'water') {
-      consumedWater += newFood['weight'];
-    }
-  });
+      // Update water intake if food is water
+      if (newFood['name'].toLowerCase() == 'water') {
+        consumedWater += newFood['weight'];
+      }
+
+      // Debugging logs
+      print("Current foodItems: $foodItems");
+    });
+
+void _navigateAndUpdatePersonalInfo() async {
+  final result = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => EditPersonalInfoPage(
+        age: age,
+        gender: gender,
+        weight: weight,
+        height: height,
+        activeLevel: activeLevel,
+      ),
+    ),
+  );
+
+  if (result != null) {
+    setState(() {
+      age = result['age'];
+      gender = result['gender'];
+      weight = result['weight'];
+      height = result['height'];
+      activeLevel = result['activeLevel'];
+    });
+  }
 }
 
-
-  void _navigateAndUpdatePersonalInfo() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditPersonalInfoPage(
-          age: age,
-          gender: gender,
-          weight: weight,
-          height: height,
-          activeLevel: activeLevel,
-        ),
-      ),
-    );
-
-    if (result != null) {
-      setState(() {
-        age = result['age'];
-        gender = result['gender'];
-        weight = result['weight'];
-        height = result['height'];
-        activeLevel = result['activeLevel'];
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-  double totalCalories = calculateTDEE();
-  double totalWater = calculateWaterRequirement();
+    double totalCalories = calculateTDEE();
+    double totalWater = calculateWaterRequirement();
 
-int carbGoal = (calculateCarbGoal()).toInt();
-int proteinGoal = (calculateProteinGoal()).toInt();
-int fatGoal = (calculateFatGoal()).toInt();
-
-int leftcarbGoal = (carbGoal - consumedCarbs).toInt();
-int leftproteinGoal = (proteinGoal - consumedProtein).toInt();
-int leftfatGoal = (fatGoal - consumedFat).toInt();
-
-
-  double remainingCalories = totalCalories - consumedCalories;
-  double remainingWater = totalWater - consumedWater;
+    double remainingCalories = totalCalories - consumedCalories;
+    double remainingWater = totalWater - consumedWater;
 
     return Scaffold(
+      // appBar: AppBar(
+      //   title: Text('Home Page'),
+      //   backgroundColor: Color(0xff6750a4),
+      //   titleTextStyle: TextStyle(
+      //       color: Color(0xfffafafa),
+      //       fontSize: 20,
+      //       fontWeight: FontWeight.bold),
+      //   leading: IconButton(
+      //     icon: Icon(Icons.arrow_back, color: Color(0xfffafafa)),
+      //     onPressed: () {
+      //       Navigator.of(context).pop();
+      //     },
+      //   ),
+      // ),
       body: SingleChildScrollView(
+        // Make the entire body scrollable
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Greeting Section
             Text(
               'Hello, User!',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 24),
 
+            // Remaining Calories Section
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -183,7 +180,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                     ),
                   ),
                   Text(
-                    '${remainingCalories.toStringAsFixed(1)} kcal',
+                    '$remainingCalories kcal',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -192,7 +189,8 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                   ),
                   SizedBox(height: 8),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(
+                        4), // Add border radius to the progress bar
                     child: LinearProgressIndicator(
                       value: consumedCalories / totalCalories,
                       color: Color(0xff6750a4),
@@ -202,7 +200,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Intake ${consumedCalories.toStringAsFixed(1)} kcal / ${totalCalories.toStringAsFixed(1)} kcal',
+                    'Intake $consumedCalories kcal / $totalCalories kcal',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black,
@@ -213,6 +211,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
             ),
             SizedBox(height: 24),
 
+// Macronutrients Section
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -254,7 +253,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                                     80, // Increased size of circular indicator
                                 height: 80,
                                 child: CircularProgressIndicator(
-                                  value: consumedCarbs / carbGoal, // Example progress value
+                                  value: 0.6, // Example progress value
                                   color: Color(0xff6750a4),
                                   backgroundColor:
                                       Color(0xff6750a4).withOpacity(0.3),
@@ -265,7 +264,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '$consumedCarbs', // Consumed number
+                                    '30', // Consumed number
                                     style: TextStyle(
                                       fontSize:
                                           20, // Increased size of consumed number
@@ -273,7 +272,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                                     ),
                                   ),
                                   Text(
-                                    '/$carbGoal g', // Total goal in new line
+                                    '/120g', // Total goal in new line
                                     style: TextStyle(
                                       fontSize: 14,
                                     ),
@@ -284,7 +283,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'left $leftcarbGoal g', // Remaining amount at the bottom
+                            'left 90g', // Remaining amount at the bottom
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey[800],
@@ -311,7 +310,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                                     80, // Increased size of circular indicator
                                 height: 80,
                                 child: CircularProgressIndicator(
-                                  value: consumedProtein / proteinGoal, // Example progress value
+                                  value: 0.4, // Example progress value
                                   color: Color(0xff6750a4),
                                   backgroundColor:
                                       Color(0xff6750a4).withOpacity(0.3),
@@ -322,7 +321,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '$consumedProtein', // Consumed number
+                                    '24', // Consumed number
                                     style: TextStyle(
                                       fontSize:
                                           20, // Increased size of consumed number
@@ -330,7 +329,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                                     ),
                                   ),
                                   Text(
-                                    '/$proteinGoal g', // Total goal in new line
+                                    '/60g', // Total goal in new line
                                     style: TextStyle(
                                       fontSize: 14,
                                     ),
@@ -341,7 +340,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'left $leftproteinGoal g', // Remaining amount at the bottom
+                            'left 36g', // Remaining amount at the bottom
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey[800],
@@ -368,7 +367,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                                     80, // Increased size of circular indicator
                                 height: 80,
                                 child: CircularProgressIndicator(
-                                  value: consumedFat / fatGoal, // Example progress value
+                                  value: 0.8, // Example progress value
                                   color: Color(0xff6750a4),
                                   backgroundColor:
                                       Color(0xff6750a4).withOpacity(0.3),
@@ -379,7 +378,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '$consumedFat', // Consumed number
+                                    '48', // Consumed number
                                     style: TextStyle(
                                       fontSize:
                                           20, // Increased size of consumed number
@@ -387,7 +386,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                                     ),
                                   ),
                                   Text(
-                                    '/$leftfatGoal g', // Total goal in new line
+                                    '/60g', // Total goal in new line
                                     style: TextStyle(
                                       fontSize: 14,
                                     ),
@@ -398,7 +397,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'left $leftfatGoal g', // Remaining amount at the bottom
+                            'left 12g', // Remaining amount at the bottom
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey[800],
@@ -411,8 +410,10 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                 ],
               ),
             ),
+
             SizedBox(height: 24),
 
+            // Water Intake Section
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -431,7 +432,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                     ),
                   ),
                   Text(
-                    '${remainingWater.toStringAsFixed(1)} ml',
+                    '$remainingWater ml',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -440,7 +441,8 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                   ),
                   SizedBox(height: 8),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(
+                        4), // Add border radius to the progress bar
                     child: LinearProgressIndicator(
                       value: consumedWater / totalWater,
                       color: Color(0xff6750a4),
@@ -450,7 +452,7 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Intake ${consumedWater.toStringAsFixed(1)} ml / ${totalWater.toStringAsFixed(1)} ml',
+                    'Intake $consumedWater ml / $totalWater ml',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black,
@@ -461,12 +463,13 @@ int leftfatGoal = (fatGoal - consumedFat).toInt();
             ),
             SizedBox(height: 24),
 
+            // Recent Food List
             Text(
               'Recent Foods',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
-Column(
+            Column(
               children: foodItems.map((food) {
                 return Container(
                   margin: EdgeInsets.only(bottom: 16),
@@ -526,6 +529,7 @@ Column(
                 );
               }).toList(),
             ),
+            SizedBox(height: 16),
           ],
         ),
       ),
@@ -578,32 +582,4 @@ Column(
       ),
     );
   }
-
-  // Widget _buildNutrientIndicator(String name, double value, double maxValue) {
-  //   return Expanded(
-  //     child: Column(
-  //       children: [
-  //         Text(
-  //           name,
-  //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-  //         ),
-  //         SizedBox(height: 4),
-  //         Text(
-  //           '${value.toStringAsFixed(1)} g',
-  //           style: TextStyle(fontSize: 14, color: Colors.black54),
-  //         ),
-  //         SizedBox(height: 8),
-  //         ClipRRect(
-  //           borderRadius: BorderRadius.circular(4),
-  //           child: LinearProgressIndicator(
-  //             value: value / maxValue,
-  //             color: Color(0xff6750a4),
-  //             backgroundColor: Color(0xff6750a4).withOpacity(0.3),
-  //             minHeight: 20,
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }

@@ -529,81 +529,67 @@ Column(
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 6.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: Icon(Icons.bar_chart, size: 28, color: Color(0xff6750a4)),
-              onPressed: () {
-                // Navigate to report page
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.person, size: 28, color: Color(0xff6750a4)),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditPersonalInfoPage(
-                      age: age,
-                      gender: gender,
-                      weight: weight,
-                      height: height,
-                      activeLevel: activeLevel,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff6750a4),
-        child: Icon(Icons.add, color: Color(0xfffafafa)),
         onPressed: () async {
           final newFood = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddFoodPage()),
+            MaterialPageRoute(
+              builder: (context) => AddFoodPage(),
+            ),
           );
 
           if (newFood != null) {
             _addFood(newFood);
           }
         },
+        child: Icon(Icons.add),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(Icons.person),
+              onPressed: _navigateAndUpdatePersonalInfo,
+            ),
+            IconButton(
+              icon: Icon(Icons.report),
+              onPressed: () {
+
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  // Widget _buildNutrientIndicator(String name, double value, double maxValue) {
-  //   return Expanded(
-  //     child: Column(
-  //       children: [
-  //         Text(
-  //           name,
-  //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-  //         ),
-  //         SizedBox(height: 4),
-  //         Text(
-  //           '${value.toStringAsFixed(1)} g',
-  //           style: TextStyle(fontSize: 14, color: Colors.black54),
-  //         ),
-  //         SizedBox(height: 8),
-  //         ClipRRect(
-  //           borderRadius: BorderRadius.circular(4),
-  //           child: LinearProgressIndicator(
-  //             value: value / maxValue,
-  //             color: Color(0xff6750a4),
-  //             backgroundColor: Color(0xff6750a4).withOpacity(0.3),
-  //             minHeight: 20,
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+  Widget _buildNutrientIndicator(String name, double value, double maxValue) {
+    return Expanded(
+      child: Column(
+        children: [
+          Text(
+            name,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 4),
+          Text(
+            '${value.toStringAsFixed(1)} g',
+            style: TextStyle(fontSize: 14, color: Colors.black54),
+          ),
+          SizedBox(height: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: value / maxValue,
+              color: Color(0xff6750a4),
+              backgroundColor: Color(0xff6750a4).withOpacity(0.3),
+              minHeight: 20,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
